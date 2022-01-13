@@ -1,5 +1,6 @@
 package edu.knoldus
 
+import scala.annotation.tailrec
 import scala.language.postfixOps
 
 class Sorting extends App {
@@ -35,30 +36,41 @@ class Sorting extends App {
 
 
 
-    for (i <- 0 until array.length - 1) {
-      var min = i
-      for (j <- i + 1 until array.length) {
-        if (array(j) < array(min)) min = j
+    @tailrec
+    def selectionHelper(list: List[Int], acc:List[Int] =List[Int]()): List[Int]={
+      if(list== Nil){
+        acc
+      }else
+      {
+        val min = list.min
+        val remainlist =list.filter(_ !=min)
+        selectionHelper(remainlist, acc ::: List.fill(list.length - remainlist.length)(min))
       }
-      val temp = array(i)
-      array(i) = array(min)
-      array(min) = temp
+
     }
-    array
+    selectionHelper(array.toList).toArray
   }
 
       def bubbleSort(array: Array[Int]): Array[Int] = {
-        for (i <- 1 to array.length - 1) {
-          for (j <- (i - 1) to 0 by -1) {
-            if (array(j) > array(j + 1)) {
-              val temp = array(j + 1)
-              array(j + 1) = array(j)
-              array(j) = temp
+
+
+        def bubbleHelper(array: Array[Int], l:Int): Int={
+          if(l==1) {
+            return 0
+          }
+          for(i<-0 until l-1){
+            if(array(i) >array(i+1)){
+              val temp = array(i)
+              array(i) = array(i+1)
+              array(i+1) = temp
             }
           }
+          bubbleHelper(array, l-1)
         }
+        bubbleHelper(array,array.length)
         array
       }
+
 
 
 }
